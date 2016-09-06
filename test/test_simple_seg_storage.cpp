@@ -226,7 +226,7 @@ int main()
         std::vector<void*> vpv;
         for(std::size_t i=0; i < 6; ++i) { vpv.push_back(tstore.malloc()); }
         BOOST_ASSERT(tstore.empty());
-        std::random_shuffle(vpv.begin(), vpv.end());
+        std::shuffle(vpv.begin(), vpv.end(), gen);
 
         for(std::size_t i=0; i < 6; ++i)
         {
