@@ -10,6 +10,7 @@
 #include <boost/pool/object_pool.hpp>
 
 #include <boost/detail/lightweight_test.hpp>
+#include <boost/random/mersenne_twister.hpp>
 
 #include <algorithm>
 #include <deque>
@@ -112,6 +113,8 @@ std::set<char *> TrackAlloc<UserAllocator>::allocated_blocks;
 
 typedef TrackAlloc<boost::default_user_allocator_new_delete> track_alloc;
 
+boost::mt19937 gen;
+
 void test()
 {
     {
@@ -137,7 +140,7 @@ void test()
         {
             v.push_back(pool.construct());
         }
-        std::random_shuffle(v.begin(), v.end());
+        std::shuffle(v.begin(), v.end(), gen);
         for(int j=0; j < 5; ++j)
         {
             pool.destroy(v[j]);
@@ -280,6 +283,7 @@ void test_void()
 int main()
 {
     std::srand(static_cast<unsigned>(std::time(0)));
+    gen.seed(static_cast<boost::uint32_t>(std::time(0)));
 
     test();
     test_alloc();
